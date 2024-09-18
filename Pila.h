@@ -1,5 +1,8 @@
 #include "Nodo.h"
 #include<iostream>
+#include<cctype>
+#include<string>
+#include<math.h>
 
 using namespace std;
 
@@ -19,6 +22,13 @@ class Pila
         T top(); //retornar el valor que hay guardado en la cima de la pila
         int getNumElementos(); //retorna el número de elementos de la pila
         int evaluarPosfija(string posfija); //Método que evalua(da el resultado) de una expresión que estaba expresada en notación infija
+        void aplicarSuma(); //Método para aplicar la suma en dos operandos de una expresión notación posfija
+        void aplicarResta(); //Método para aplicar la resta sobre dos operandos de una expresión en notación posfija
+        void aplicarMultiplicacion(); //Método para aplicar la multiplicación sobre 2 operandos de una expresión en notación posfija
+        void aplicarDivision(); //Método para aplicar la división sobre 2 operandos de una expresión en notación posfija
+        void aplicarModulo(); //Método para aplicar el módulo sobre 2 operandos de una expresión en notación nposfija
+        void aplicarPotencia(); //Método para aplicar la potencia de sobre 2 operandos de una expresión en notación posfija
+        bool balancearParentesis(string balanceo); //método para indicar si una expresión tiene los paréntesis balanceados
 };
 
 //Constructor
@@ -179,13 +189,178 @@ string Pila<T>::infija_posfija(string infija)
 template<typename T>
 int Pila<T>::evaluarPosfija(string posfija)
 {
-    int operando2, operando1, resultado = 0;
+    int resultado = 0;
+    int numero;
+
     for(int i=0;i<posfija.size();i++)
     {
-        if(posfija[i] == '+')
+        if(isdigit(posfija[i]))
         {
-
+            numero = posfija[i] - '0';
+            push(numero);
+        }
+        else if(posfija[i] == '+')
+        {
+            aplicarSuma();
+        }
+        else if(posfija[i] == '-')
+        {
+            aplicarResta();
+        }
+        else if(posfija[i] == '*')
+        {
+            aplicarMultiplicacion();
+        }
+        else if(posfija[i] == '/')
+        {
+            aplicarDivision();
+        }
+        else if(posfija[i] == '%')
+        {
+            aplicarModulo();
+        }
+        else
+        {
+            aplicarPotencia();
         }
     }
+
+    resultado = top();
+
+    pop();
+
+    return resultado;
+
+}
+
+
+template<typename T>
+void Pila<T>::aplicarSuma()
+{
+    int operando2 = top();
+    pop();
+    int operando1 = top();
+    pop();
+
+    int suma = operando1 + operando2;
+
+    push(suma);
+}
+
+template<typename T>
+void Pila<T>::aplicarResta()
+{
+    int operando2 = top();
+    pop();
+    int operando1 = top();
+    pop();
+
+    int resta = operando1 - operando2;
+
+    push(resta);
+}
+
+template<typename T>
+void Pila<T>::aplicarMultiplicacion()
+{
+    int operando2 = top();
+    pop();
+    int operando1 = top();
+    pop();
+
+    int multiplicacion = operando1 * operando2;
+
+    push(multiplicacion);
+}
+
+template<typename T>
+void Pila<T>::aplicarDivision()
+{
+    int operando2 = top();
+    pop();
+    int operando1 = top();
+    pop();
+
+    int division = operando1 / operando2;
+
+    push(division);
+}
+
+template<typename T>
+void Pila<T>::aplicarModulo()
+{
+    int operando2 = top();
+    pop();
+    int operando1 = top();
+    pop();
+
+    int modulo = operando1 % operando2;
+
+    push(modulo);
+}
+
+template<typename T>
+void Pila<T>::aplicarPotencia()
+{
+    int potencia = 1;
+    int operando2 = top();
+    pop();
+    int operando1 = top();
+    pop();
+
+    //Calculando la potencia
+    for(int i=1;i <= operando2;i++)
+    {
+        potencia *= operando1;
+    }
+
+    push(potencia);
+}
+
+template<typename T>
+bool Pila<T>::balancearParentesis(string balanceo)
+{
+    bool esBalanceada = true;
+
+    for(int i=0;i<balanceo.size();i++)
+    {
+        if(balanceo[i] == '(' || balanceo[i] == '[' || balanceo[i] == '{')
+        {
+            push(balanceo[i]);
+        }
+        else if(balanceo[i] == ')')
+        {
+            if(top() != '(')
+            {
+                esBalanceada = false;
+                break;
+            }
+            else
+                pop();
+        }
+        else if(balanceo[i] == ']')
+        {
+            if(top() != '[')
+            {
+                esBalanceada = false;
+                break;
+            }
+            else
+                pop();
+        }
+        else
+        {
+            if(top() != '{')
+            {
+                esBalanceada = false;
+                break;
+            }
+            else
+                pop();
+        }
+
+    }
+
+    return esBalanceada;
 
 }
