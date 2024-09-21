@@ -11,7 +11,7 @@ int main()
     Pila<char> *pilaParentesis = new Pila<char>;
 
     //Expresión en notación infija
-    string infija = "(3*(4+5)*(7-2))";
+    string infija = "((1-8)*2+(2+2))";
 
     cout<<"Expresion matematica en notacion infija: "<<infija<<endl;
 
@@ -23,7 +23,7 @@ int main()
 
     cout<<pilaOperandos->evaluarPosfija(posfija);
 
-    string parentesis = "[()]{}{[()()][()]}";
+    string parentesis = "({[][]()}){[()[]]}[()()}";
 
     if(pilaParentesis->balancearParentesis(parentesis))
         cout<<"\nLa expresion de parentesis "<<parentesis<<" si esta balanceado"<<endl;

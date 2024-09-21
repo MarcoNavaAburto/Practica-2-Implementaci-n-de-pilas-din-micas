@@ -2,7 +2,7 @@
 #include<iostream>
 #include<cctype>
 #include<string>
-#include<math.h>
+#include<cmath>
 
 using namespace std;
 
@@ -155,7 +155,7 @@ string Pila<T>::infija_posfija(string infija)
         else if(infija[i] == '*' || infija[i] == '/' || infija[i] == '%')
         {
 
-            while(numElementos != 0 && (top() == '*' || top() == '/' || top() == '%'))
+            while(numElementos != 0 && (top() == '*' || top() == '/' || top() == '%') || top() == '^')
             {
                 salida += top();
                 pop();
@@ -189,7 +189,7 @@ string Pila<T>::infija_posfija(string infija)
 template<typename T>
 int Pila<T>::evaluarPosfija(string posfija)
 {
-    int resultado = 0;
+    int resultado;
     int numero;
 
     for(int i=0;i<posfija.size();i++)
@@ -219,9 +219,13 @@ int Pila<T>::evaluarPosfija(string posfija)
         {
             aplicarModulo();
         }
-        else
+        else if(posfija[i] == '^')
         {
             aplicarPotencia();
+        }
+        else
+        {
+            cout<<"Operador no soportado"<<endl;
         }
     }
 
@@ -302,17 +306,13 @@ void Pila<T>::aplicarModulo()
 template<typename T>
 void Pila<T>::aplicarPotencia()
 {
-    int potencia = 1;
+    int potencia;
     int operando2 = top();
     pop();
     int operando1 = top();
     pop();
 
-    //Calculando la potencia
-    for(int i=1;i <= operando2;i++)
-    {
-        potencia *= operando1;
-    }
+    potencia = pow(operando1, operando2);
 
     push(potencia);
 }
